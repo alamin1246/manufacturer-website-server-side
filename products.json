@@ -1,0 +1,59 @@
+[
+    {
+        "productName" : "Harddisk WD,Toshiba",
+        "productImage" : "https://static-01.daraz.com.bd/p/157381458390b590483814bbbca71b63.jpg",
+        "productPrice" : "1400",
+        "minOrder"  : "150",
+        "availableQuantity" : "1500",
+        "productDescription" : "The 7200 RPM 3.5-inch (8.9cm) HDD series is designed for consumer and commercial desktop computers, gaming PCs, and external storage."
+    },
+    {
+        "productName" : "GM-3PN Tag: USB 3.0 Network Adapter",
+        "productImage" : "https://www.gearmo.com/wp-content/uploads/2014/01/usb3-ethernet_800.jpg",
+        "productPrice" : "2375",
+        "minOrder"  : "150",
+        "availableQuantity" : "1500",
+        "productDescription" : "For High-Speed network users of Desktop and Laptop, USB 3.0 Ethernet Adapter for single device connection using 10/100/1000Mbps."
+    },
+    {
+        "productName" : "HP M32f FHD Monitor",
+        "productImage" : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQL0r-a_oZU5boeiOQPCxutQvzBAPaWKO9xtg&usqp=CAU",
+        "productPrice" : "18850",
+        "minOrder"  : "150",
+        "availableQuantity" : "1500",
+        "productDescription" : "The Full HD Monitor HP M32F. The HP M32F FHD display feels as good as it looks, with 99 percent sRGB color coverage."
+    },
+
+    {
+        "productName" : "Delux KA150 Keyboard",
+        "productImage" : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaZ4Yee-GXoUSVWSLK7IuLvLmTU07rd_xVQA&usqp=CAU",
+        "productPrice" : "600",
+        "minOrder"  : "150",
+        "availableQuantity" : "1500",
+        "productDescription" : "Delux KA150 wired multimedia keyboard Keyboard design with flat keys. 12 multimedia USB keys 12 function keys in total Characters are printed with a laser."
+    },
+    {
+        "productName" : "HP 4175 DeskJet All in One Printer",
+        "productImage" : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXiKoYoynAh2TRgJSWUm_P5YlnbMxXeU3nQw&usqp=CAU",
+        "productPrice" : "10800",
+        "minOrder"  : "150",
+        "availableQuantity" : "1500",
+        "productDescription" : "HP 4175 DeskJet Printer, Printer with Dynamic Security, With an automated document feeder, you can scan many pages quickly and use the HP Smart app to print, scan, copy, and send faxes from anywhere, on a computer, tablet, or phone."
+    },
+    {
+        "productName" : "Xiaomi Bluetooth Computer Speakers",
+        "productImage" : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE4cNtHhBOOapI0xycwM1W4ohSLCEuoszTlA&usqp=CAU",
+        "productPrice" : "6490",
+        "minOrder"  : "150",
+        "availableQuantity" : "1500",
+        "productDescription" : "The Xiaomi Bluetooth Computer Speakers include the following features: With a high-performance bluetooth chip, it displays sound quality incisively and vividly, giving listeners a sensory feast."
+    },
+    {
+        "productName" : "G821 Gaming Mouse",
+        "toolImage" : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToDtstfukdILqFFjhvuuR6zcpSuo17xbIXUA&usqp=CAU",
+        "productPrice" : "1200",
+        "minOrder"  : "150",
+        "availableQuantity" : "1500",
+        "productDescription" : "2400 dpi, USB smart connection, low power consumption; up to 10 meter transmission distance (32.81 feet). The ergonomic shape allows for a comfortable grip and use. It has a good, modern appearance. The USB receiver is lightweight and may be attached to the mouse's back. Ideal for gaming as well as home and office computers."
+    }
+]
