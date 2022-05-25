@@ -177,6 +177,19 @@ const run = async () => {
       res.send('Hello,Running Computer Parts Manufacturer Server');
     });
 
+    //API to get all products
+    app.get("/products", async (req, res) => {
+      const products = await productsCollection.find({}).toArray();
+      res.send(products);
+    });
+
+    //API to get single products
+    app.get("/products/:id", async (req, res) => {
+      const id = req.params.id;
+      const product = await productsCollection.findOne({ _id: ObjectId(id) });
+      res.send(product);
+    });
+
 
   } finally {
     // client.close();
