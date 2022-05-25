@@ -190,7 +190,86 @@ const run = async () => {
       res.send(product);
     });
 
+    ////API to get all orders
+    app.get("/orders", async (req, res) => {
+      const orders = await ordersCollection.find({}).toArray();
+      res.send(orders);
+    });
 
+    //API to update a order
+    app.put("/orders/:id", async (req, res) => {
+      const orderId = req.params.id;
+      const order = req.body;
+      console.log("order", order);
+      const query = { _id: ObjectId(orderId) };
+      const options = { upsert: true };
+      const updatedOrder = await ordersCollection.updateOne(
+        query,
+        {
+          $set: order,
+        },
+        options
+      );
+      res.send(updatedOrder);
+    });
+
+
+    //API to get all reviews
+    app.get("/reviews", async (req, res) => {
+      const reviews = await reviewsCollection.find({}).toArray();
+      res.send(reviews);
+    });
+
+    //API to post a review
+    app.post("/review", verifyJWT, async (req, res) => {
+      // const decodedEmail = req.decoded.email;
+      // const email = req.headers.email;
+      const review = req.body;
+      const result = await reviewsCollection.insertOne(review);
+      res.send(result);
+      // if (email === decodedEmail) {
+
+      // } else {
+      //   res.send("Unauthorized access");
+      // }
+    });
+
+    //API to post a product
+    app.post("/product", async (req, res) => {
+      // const decodedEmail = req.decoded.email;
+      // const email = req.headers.email;
+      const product = req.body;
+      console.log("product", product);
+      await productsCollection.insertOne(product);
+      res.send(product);
+    });
+
+    //API delete a product
+    app.delete("/product/:id", verifyJWT, async (req, res) => {
+      // const decodedEmail = req.decoded.email;
+      // const email = req.headers.email;
+      const id = req.params.id;
+      const result = await productsCollection.deleteOne({ _id: ObjectId(id) });
+      res.send(result);
+
+    });
+
+    //API to update a tool
+    app.put("/product/:id", verifyJWT, async (req, res) => {
+      // const decodedEmail = req.decoded.email;
+      // const email = req.headers.email;
+      const id = req.params.id;
+      const product = req.body;
+      console.log("product", product);
+      const options = { upsert: true };
+      const result = await productsCollection.updateOne(
+        { _id: ObjectId(id) },
+        { $set: product },
+        options
+      );
+      res.send(result);
+
+    });
 
     //API to get blogs
 
