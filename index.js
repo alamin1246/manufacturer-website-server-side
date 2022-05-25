@@ -191,6 +191,14 @@ const run = async () => {
     });
 
 
+
+    //API to get blogs
+
+    app.get("/blogs", async (req, res) => {
+      const query = {};
+      const blogs = await blogsCollection.find(query).toArray();
+      res.send(blogs);
+    });
   } finally {
     // client.close();
   }
