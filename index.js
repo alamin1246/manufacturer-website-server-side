@@ -1,8 +1,11 @@
-const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+var nodemailer = require('nodemailer');
+var sgTransport = require('nodemailer-sendgrid-transport');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 require("dotenv").config();
 
@@ -34,7 +37,74 @@ function verifyJWT(req, res, next) {
   });
 }
 
+const emailSenderOptions = {
+  auth: {
+    api_key: process.env.EMAIL_SENDER_KEY
+  }
+}
 
+const emailClient = nodemailer.createTransport(sgTransport(emailSenderOptions));
+function sendOrderEmail(booking) {
+  const { userEmail, userName, productName, productPrice, quantity, totalPrice } = booking;
+
+  var email = {
+    from: process.env.EMAIL_SENDER,
+    to: userEmail,
+    subject: `Your Order for ${productName} is Confirmed`,
+    text: `Your Order for ${productName} is Confirmed`,
+    html: `
+      <div>
+        <p> Hello ${userName}, </p>
+        <h3>Your Order for ${productName}, ${productPrice}, ${quantity},${totalPrice} is confirmed</h3>
+        
+        <h3>Our Address</h3>
+        <p>Demra, Dhaka-1361</p>
+        <p>Bangladesh</p>
+      </div>
+    `
+  };
+
+  emailClient.sendMail(email, function (err, info) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      console.log('Message sent: ', info);
+    }
+  });
+
+}
+
+function sendPaymentConfirmationEmail(orders) {
+  const { userEmail, userName, productName, productPrice, quantity, totalPrice } = orders;
+
+  var email = {
+    from: process.env.EMAIL_SENDER,
+    to: userEmail,
+    subject: `We have received your payment for ${productName} is Confirmed`,
+    text: `Your payment for this booking ${productName} is Confirmed`,
+    html: `
+      <div>
+        <p> Hello ${userName}, </p>
+        <h3>Thank you for your payment . </h3>
+        <h3>We have received your payment</h3>
+        <h3>Our Address</h3>
+        <<p>Demra, Dhaka-1361</p>
+        <p>Bangladesh</p>
+      </div>
+    `
+  };
+
+  emailClient.sendMail(email, function (err, info) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      console.log('Message sent: ', info);
+    }
+  });
+
+}
 const run = async () => {
   try {
     await client.connect();
@@ -46,6 +116,7 @@ const run = async () => {
     const reviewsCollection = database.collection("reviews");
     const blogsCollection = database.collection("blogs");
     const adminsCollection = database.collection("admins");
+    const paymentCollection = database.collection('payments');
 
     //Verify Admin Role
     const verifyAdmin = async (req, res, next) => {
@@ -59,6 +130,17 @@ const run = async () => {
         res.status(403).send({ message: "Forbidden" });
       }
     };
+    app.post('/create-payment-intent', verifyJWT, async (req, res) => {
+      const product = req.body;
+      const price = product.price;
+      const amount = price * 100;
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: 'usd',
+        payment_method_types: ['card']
+      });
+      res.send({ clientSecret: paymentIntent.client_secret })
+    });
 
     //API to post a user
     app.put("/user/:email", async (req, res) => {
@@ -233,11 +315,32 @@ const run = async () => {
 
     //API to add a order
     app.post("/orders", async (req, res) => {
-      const order = req.body;
-      const result = await ordersCollection.insertOne(order);
-      res.send(result);
+      const orders = req.body;
+      const query = { productName: orders.productName, userName: orders.userName }
+      const result = await ordersCollection.insertOne(orders);
+      const exists = await ordersCollection.findOne(query);
+      if (exists) {
+        return res.send({ success: false, orders: exists })
+      }
+      console.log('sending email');
+      sendOrderEmail(orders);
+      return res.send({ success: true, result });
     });
+    app.patch('/orders/:id', verifyJWT, async (req, res) => {
+      const id = req.params.id;
+      const payment = req.body;
+      const filter = { _id: ObjectId(id) };
+      const updatedDoc = {
+        $set: {
+          paid: true,
+          transactionId: payment.transactionId
+        }
+      }
 
+      const result = await paymentCollection.insertOne(payment);
+      const updatedOrders = await paymentCollection.updateOne(filter, updatedDoc);
+      res.send(updatedOrders);
+    })
     //API to delete a order
     app.delete("/orders/:id", async (req, res) => {
       const id = req.params.id;
